@@ -1,5 +1,3 @@
-package sortingpoints;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.*;
@@ -90,13 +88,14 @@ public class SortingMain {
          mergeSort
       
       */
-      
-      
-      
+
+
+       System.out.println(Arrays.toString(pointArray));
       // insertionSort(pointArray);
-       selectionSort(pointArray);
-      // heapSort(pointArray);
+       //selectionSort(pointArray);
+       heapSort(pointArray);
       // mergeSort(pointArray);
+       System.out.println(Arrays.toString(pointArray));
       
       for(int i = pointArray.length - 1; i >= 0; i--) {
          g.setColor(colors[r.nextInt(colors.length)]);
@@ -105,7 +104,6 @@ public class SortingMain {
    }
    
    public static void insertionSort(Point3D[] points) {
-       System.out.println(Arrays.toString(points));
        for(int i = 1; i < points.length; i++){
            int index = linearSearch(points, points[i], i - 1);
            Point3D hold = points[i];
@@ -114,7 +112,6 @@ public class SortingMain {
            }
            points[index] = hold;
        }
-       System.out.println(Arrays.toString(points));
    }
    
    public static void selectionSort(Point3D[] points) {
@@ -129,13 +126,40 @@ public class SortingMain {
            points[least] = points[i];
            points[i] = hold;
        }
-       System.out.println(Arrays.toString(points));
    }
    
    public static void heapSort(Point3D[] points) {
-      /*
-         Your code here
-      */
+      int heapSize = points.length - 1;
+      for (int i = ((points.length + 1) / 2) - 1 ; i >= 0 ; i--) {
+          percolateDown(points, i, heapSize);
+      }
+      for (int i = 0 ; i < points.length ; i++) {
+          Point3D hold = points[0];
+          points[0] = points[heapSize];
+          points[heapSize] = hold;
+          heapSize--;
+          percolateDown(points, 0, heapSize);
+      }
+   }
+
+   private static void percolateDown(Point3D[] points, int index, int heapSize) {
+       if (((index + 1) * 2) - 1 <= points.length - 1) {
+           int target = findMaxPoints(points, ((index + 1) * 2) - 1, (index + 1) * 2);
+           if (points[index].compareTo(points[target]) < 0 && target <= heapSize) {
+               Point3D hold = points[index];
+               points[index] = points[target];
+               points[target] = hold;
+               percolateDown(points, target, heapSize);
+           }
+       }
+   }
+
+   private static int findMaxPoints(Point3D[] points, int firstIndex, int secondIndex) {
+       if (secondIndex > points.length - 1 || points[firstIndex].compareTo(points[secondIndex]) >= 0) {
+           return firstIndex;
+       } else {
+           return secondIndex;
+       }
    }
    
    public static void mergeSort(Point3D[] points) {
