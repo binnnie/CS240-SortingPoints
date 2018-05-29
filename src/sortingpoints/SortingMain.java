@@ -2,16 +2,16 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.*;
 
-// Ryan Parsons
-// May 23rd, 2017
-// Version 2.0
+/* Brandon Dixon, Jordan Courvoisier
+ * 05/28/2018
+ * SortingMain.java
+ *
+ * Simple program to display 3 dimensional point objects on a graphical interface.
+ * Points use the z coordinate to determine which is on top. Several different sorting
+ * algorithms are used (to be implemented by you) to sort the elements into the proper
+ * ordering for display.
+ */
 
-/* 
-   Simple program to display 3 dimensional point objects on a graphical interface.
-   Points use the z coordinate to determine which is on top. Several differnt sorting
-   algorithms are used (to be implemented by you) to sort the elements into the proper
-   ordering for display.
-*/
 
 public class SortingMain {
 
@@ -25,7 +25,7 @@ public class SortingMain {
    public static final int Z_MAX = 50;
    
    // Number of points to get displayed
-   public static final int NUM_POINTS = 200;
+   public static final int NUM_POINTS = 20;
 
    public static void main(String[] args) {
       // Setting up the graphics
@@ -93,8 +93,8 @@ public class SortingMain {
        System.out.println(Arrays.toString(pointArray));
        //insertionSort(pointArray);
        //selectionSort(pointArray);
-       //heapSort(pointArray);
-       mergeSort(pointArray);
+       heapSort(pointArray);
+       //mergeSort(pointArray);
        System.out.println(Arrays.toString(pointArray));
       
       for(int i = pointArray.length - 1; i >= 0; i--) {
@@ -102,7 +102,8 @@ public class SortingMain {
          g.fillOval(pointArray[i].getX(), pointArray[i].getY(), RADIUS, RADIUS);
       }
    }
-   
+
+   //Accepts an array of 3D points and sorts them using an insertion sort algorithm.
    public static void insertionSort(Point3D[] points) {
        for(int i = 1; i < points.length; i++){
            int index = linearSearch(points, points[i], i - 1);
@@ -113,11 +114,12 @@ public class SortingMain {
            points[index] = hold;
        }
    }
-   
+
+   //Accepts an array of 3D points and sorts them using a selection sort algorithm.
    public static void selectionSort(Point3D[] points) {
-       for(int i = 0; i < points.length; i++){
-           int least = points.length - 1;
-           for(int n = points.length - 1; n > i; n--){
+       for (int i = 0; i < points.length; i++) {
+           int least = i;
+           for (int n = i; n < points.length ; n++) {
                if (points[n].compareTo(points[least]) < 0) {
                    least = n;
                }
@@ -127,7 +129,8 @@ public class SortingMain {
            points[i] = hold;
        }
    }
-   
+
+   //Accepts an array of 3D points and sorts them using a heap sort algorithm.
    public static void heapSort(Point3D[] points) {
       int heapSize = points.length - 1;
       for (int i = ((points.length + 1) / 2) - 1 ; i >= 0 ; i--) {
@@ -142,6 +145,9 @@ public class SortingMain {
       }
    }
 
+   /* Accepts an array of 3D points, an index, and the size of the heap. This method percolates the
+    * value at the index down the heap keeping in mind the sorted section.
+    */
    private static void percolateDown(Point3D[] points, int index, int heapSize) {
        if (((index + 1) * 2) - 1 <= points.length - 1) {
            int target = findMaxPoints(points, ((index + 1) * 2) - 1, (index + 1) * 2);
@@ -154,6 +160,9 @@ public class SortingMain {
        }
    }
 
+   /* Accepts two indexes and an array of 3D points and returns the index which has the greater
+    * value in the array.
+    */
    private static int findMaxPoints(Point3D[] points, int firstIndex, int secondIndex) {
        if (secondIndex > points.length - 1 || points[firstIndex].compareTo(points[secondIndex]) >= 0) {
            return firstIndex;
@@ -161,17 +170,22 @@ public class SortingMain {
            return secondIndex;
        }
    }
-   
+
+   //Accepts an array of 3D points and sorts it using a merge sort algorithm.
    public static void mergeSort(Point3D[] points) {
-       mergeSort(points, 0, points.length - 1);
+       Point3D[] sortedPoints = new Point3D[points.length];
+       mergeSort(points,sortedPoints,  0, points.length - 1);
+       System.arraycopy(sortedPoints, 0, points, 0, points.length);
    }
 
-   private static void mergeSort(Point3D[] points, int startIndex, int endIndex) {
+   /* Private helper method for the merge sort algorithm, in addition to the 3D point array it also
+    * accepts an auxillary array of 3D points, a start index and an end index.
+    */
+   private static void mergeSort(Point3D[] points, Point3D[] sortedPoints, int startIndex, int endIndex) {
        int range = endIndex - startIndex;
-       Point3D[] sortedPoints = new Point3D[points.length];
        if (range > 50) {
-           mergeSort(points, startIndex, startIndex + range / 2);
-           mergeSort(points, (startIndex + range / 2) + 1, endIndex);
+           mergeSort(points, sortedPoints, startIndex, startIndex + range / 2);
+           mergeSort(points, sortedPoints, (startIndex + range / 2) + 1, endIndex);
            int u = startIndex;
            int v = startIndex + range / 2;
            int place = startIndex;
@@ -191,6 +205,9 @@ public class SortingMain {
        }
    }
 
+   /* Accepts an array of 3D points and a start index and an end index and sorts that section of the
+    * array using a selection sort algorithm. Used for after the break point in merge sort.
+    */
    private static void smallSort(Point3D[] points, int startIndex, int endIndex) {
        for (int i = startIndex; i <= endIndex; i++) {
            int least = i;
@@ -205,6 +222,9 @@ public class SortingMain {
        }
    }
 
+   /* Private method to linear search for the correct index for use in insertion sort. Accepts the
+    * array, the point to compare it to, and the sorted section.
+    */
    private static int linearSearch(Point3D[] array, Point3D point, int sorted){
        boolean found = false;
        int index = 0;
@@ -215,8 +235,6 @@ public class SortingMain {
                 index++;
             }
        }
-      
        return index;
    }
-   
 }
