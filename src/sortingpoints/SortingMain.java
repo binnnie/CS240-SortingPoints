@@ -92,9 +92,9 @@ public class SortingMain {
 
        System.out.println(Arrays.toString(pointArray));
       // insertionSort(pointArray);
-       //selectionSort(pointArray);
-       heapSort(pointArray);
-      // mergeSort(pointArray);
+       selectionSort(pointArray);
+       //heapSort(pointArray);
+      //mergeSort(pointArray);
        System.out.println(Arrays.toString(pointArray));
       
       for(int i = pointArray.length - 1; i >= 0; i--) {
@@ -163,10 +163,48 @@ public class SortingMain {
    }
    
    public static void mergeSort(Point3D[] points) {
-      /*
-         Your code here
-      */
-   }   
+       Point3D[] pointsSorted = new Point3D[points.length];
+       mergeSort(points, pointsSorted, 0, points.length - 1);
+   }
+
+   private static void mergeSort(Point3D[] points, Point3D[] pointsSorted, int startIndex, int endIndex) {
+       int range = endIndex - startIndex;
+       if (range > 50) {
+           mergeSort(points, pointsSorted, startIndex, startIndex + range / 2);
+           mergeSort(points, pointsSorted, (startIndex + range / 2) + 1, endIndex);
+           int u = startIndex;
+           int v = startIndex + range / 2;
+           int place = startIndex;
+           while (u < startIndex + range / 2 || v <= endIndex) {
+               if (v > endIndex && u < startIndex + range / 2 || pointsSorted[u].compareTo(pointsSorted[v]) < 0 && u < startIndex + range / 2) {
+                   points[place] = pointsSorted[u];
+                   u++;
+                   place++;
+               } else if (v <= endIndex) {
+                   points[place] = pointsSorted[v];
+                   v++;
+                   place++;
+               }
+           }
+       } else {
+           smallSort(points, pointsSorted, startIndex, endIndex);
+       }
+   }
+
+   private static void smallSort(Point3D[] points, Point3D[] pointsSorted, int startIndex, int endIndex) {
+       for (int i = startIndex; i <= endIndex; i++) {
+           int least = startIndex;
+           for (int u = i ; u <= endIndex ; u++) {
+               if (points[u].compareTo(points[least]) < 0) {
+                   least = u;
+               }
+           }
+           pointsSorted[i] = points[least];
+           Point3D hold = points[i];
+           points[i] = points[least];
+           points[least] = hold;
+       }
+   }
 
    private static int linearSearch(Point3D[] array, Point3D point, int sorted){
        boolean found = false;
