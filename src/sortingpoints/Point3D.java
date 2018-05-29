@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-/**
+/* Brandon Dixon, Jordan Courvoisier
+ * 05/29/2018
+ * Point3D.java
  *
- * @author jcourvoisier
+ * An object to represent a 3D point in space.
  */
 public class Point3D implements Comparable<Point3D> {
     
@@ -22,20 +24,25 @@ public class Point3D implements Comparable<Point3D> {
         this.y = y;
         this.z = z;
     }
-    
+
+    //Returns X value
     public int getX(){
         return x;
     }
-    
+
+    //Returns Y value
     public int getY(){
         return y;
     }
-    
+
+    //Returns Z value
     public int getZ(){
         return z;
     }
     
-
+    /* Accepts another 3D point and returns negative if that point is greater, 0 if it is equal, or
+     * positive if it is less.
+     */
     public int compareTo(Point3D other){
         if(this.z != other.z){
             return this.z - other.z;
@@ -46,8 +53,9 @@ public class Point3D implements Comparable<Point3D> {
         }else
             return 0;
     }
-    
+
+    //Returns a string representation of the point.
     public String toString(){
-        return "(" + x + "," + y + "," + z + ")";
+        return "[" + x + "," + y + "," + z + "]";
     }
 }

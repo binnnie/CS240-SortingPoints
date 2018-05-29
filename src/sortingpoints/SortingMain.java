@@ -3,7 +3,7 @@ import java.awt.Graphics;
 import java.util.*;
 
 /* Brandon Dixon, Jordan Courvoisier
- * 05/28/2018
+ * 05/29/2018
  * SortingMain.java
  *
  * Simple program to display 3 dimensional point objects on a graphical interface.
